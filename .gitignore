@@ -1,0 +1,10 @@
+# Idea Module files
+.idea/
+*.iml
+
+# Maven target directories.
+*/target/*
+target
+*/build/*
+*/dist/*
+.DS_Store
