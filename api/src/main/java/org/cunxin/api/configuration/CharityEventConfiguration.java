@@ -1,4 +1,4 @@
-package org.ijuanzhu.api.configuration;
+package org.cunxin.api.configuration;
 
 import com.yammer.dropwizard.config.Configuration;
 

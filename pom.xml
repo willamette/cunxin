@@ -3,16 +3,16 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>org.ijuanzhu</groupId>
+        <groupId>org.cunxin</groupId>
         <artifactId>libcontrol</artifactId>
         <version>0.01-SNAPSHOT</version>
         <relativePath>libcontrol/pom.xml</relativePath>
     </parent>
 
-    <artifactId>iJuanzhu</artifactId>
+    <artifactId>Cunxin</artifactId>
     <packaging>pom</packaging>
 
-    <name>iJuanzhu Main</name>
+    <name>Cunxin Main</name>
 
     <modules>
         <module>libcontrol</module>

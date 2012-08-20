@@ -3,15 +3,16 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <artifactId>iJuanzhu</artifactId>
-        <groupId>org.ijuanzhu</groupId>
+        <artifactId>libcontrol</artifactId>
+        <groupId>org.cunxin</groupId>
         <version>0.01-SNAPSHOT</version>
+        <relativePath>../libcontrol/pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>api</artifactId>
 
-    <name>iJuanzhu API Services</name>
+    <name>Cunxin API Services</name>
 
     <dependencies>
         <dependency>

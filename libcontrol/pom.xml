@@ -5,12 +5,12 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.ijuanzhu</groupId>
+    <groupId>org.cunxin</groupId>
     <artifactId>libcontrol</artifactId>
     <version>0.01-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>iJuanzhu Libcontrol</name>
+    <name>Cunxin Libcontrol</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
