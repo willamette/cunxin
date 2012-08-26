@@ -16,11 +16,12 @@ version.txt
 *index
 
 .classpath
+*/.classpath
 .DS_Store
 .metadata
 .myeclipse
 .mymetadata
-.project
+*/.project
 .settings
 .svn
 .bak
