@@ -59,10 +59,6 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-jaxrs</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml</groupId>
-            <artifactId>jackson-module-scala</artifactId>
-        </dependency>
 
         <!-- Logging -->
         <dependency>
