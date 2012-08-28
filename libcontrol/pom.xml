@@ -21,6 +21,16 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
+                <groupId>org.cunxin</groupId>
+                <artifactId>db</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.cunxin</groupId>
+                <artifactId>app</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>com.yammer.dropwizard</groupId>
                 <artifactId>dropwizard-core</artifactId>
                 <version>0.5.1</version>
@@ -127,11 +137,6 @@
                 <artifactId>jackson-jaxrs</artifactId>
                 <version>1.9.5</version>
             </dependency>
-            <dependency>
-                <groupId>com.fasterxml</groupId>
-                <artifactId>jackson-module-scala</artifactId>
-                <version>1.9.4-RC2</version>
-            </dependency>
 
             <!-- Testing -->
             <dependency>
@@ -159,12 +164,6 @@
                 </excludes>
             </resource>
             <resource>
-                <directory>src/main/scala</directory>
-                <excludes>
-                    <exclude>**/*.scala</exclude>
-                </excludes>
-            </resource>
-            <resource>
                 <directory>src/main/resources</directory>
             </resource>
         </resources>
@@ -176,39 +175,9 @@
                 </excludes>
             </testResource>
             <testResource>
-                <directory>src/test/scala</directory>
-                <excludes>
-                    <exclude>**/*.scala</exclude>
-                </excludes>
-            </testResource>
-            <testResource>
                 <directory>src/test/resources</directory>
             </testResource>
         </testResources>
-
-        <plugins>
-            <!-- enable scala/java cross-compilation -->
-            <plugin>
-                <groupId>org.scala-tools</groupId>
-                <artifactId>maven-scala-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>scala-compile-first</id>
-                        <phase>process-resources</phase>
-                        <goals>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>scala-test-compile</id>
-                        <phase>process-test-resources</phase>
-                        <goals>
-                            <goal>testCompile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
 
         <pluginManagement>
             <plugins>
@@ -239,11 +208,6 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-jar-plugin</artifactId>
                     <version>2.3.2</version>
-                </plugin>
-                <plugin>
-                    <groupId>org.scala-tools</groupId>
-                    <artifactId>maven-scala-plugin</artifactId>
-                    <version>2.15.2</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>

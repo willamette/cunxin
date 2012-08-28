@@ -17,6 +17,7 @@
     <modules>
         <module>libcontrol</module>
         <module>app</module>
+        <module>db</module>
         <module>api</module>
     </modules>
 

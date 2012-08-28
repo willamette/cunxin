@@ -16,6 +16,15 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.cunxin</groupId>
+            <artifactId>db</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.cunxin</groupId>
+            <artifactId>app</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>com.yammer.dropwizard</groupId>
             <artifactId>dropwizard-core</artifactId>
         </dependency>
