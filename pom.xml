@@ -16,7 +16,7 @@
 
     <modules>
         <module>libcontrol</module>
-        <module>db</module>
+        <module>support</module>
 
         <!-- These two will be temporarily disabled-->
         <module>donationapi</module>
