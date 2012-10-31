@@ -16,9 +16,13 @@
 
     <modules>
         <module>libcontrol</module>
-        <module>app</module>
         <module>db</module>
-        <module>api</module>
+
+        <!-- These two will be temporarily disabled-->
+        <module>donationapi</module>
+        <module>donationapp</module>
+        <module>rewardapi</module>
+        <module>rewardapp</module>
     </modules>
 
     <build>

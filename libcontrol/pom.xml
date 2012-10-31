@@ -20,17 +20,24 @@
 
     <dependencyManagement>
         <dependencies>
+            <!-- Project -->
             <dependency>
-                <groupId>org.cunxin</groupId>
+                <groupId>${project.groupId}</groupId>
                 <artifactId>db</artifactId>
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>org.cunxin</groupId>
-                <artifactId>app</artifactId>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>donationapp</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>${project.groupId}</groupId>
+                <artifactId>rewardapp</artifactId>
                 <version>${project.version}</version>
             </dependency>
 
+            <!-- DropWizard -->
             <dependency>
                 <groupId>com.yammer.dropwizard</groupId>
                 <artifactId>dropwizard-core</artifactId>
@@ -63,6 +70,7 @@
                 <artifactId>dom4j</artifactId>
                 <version>1.6.1</version>
             </dependency>
+
             <!-- Logging -->
             <dependency>
                 <groupId>log4j</groupId>
