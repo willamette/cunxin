@@ -1,0 +1,37 @@
+package org.cunxin.reward.api.module
+
+import org.cunxin.reward.app.dao.{UserDao, BadgerDao, UserBadgerDao}
+import org.cunxin.reward.app.service.{BadgerService, UserService, UserRewardService, UserEventService}
+import uk.me.lings.scalaguice.ScalaModule
+import com.google.inject.Provider
+import com.mongodb.casbah.{MongoConnection, MongoDB}
+import org.apache.commons.logging.LogFactory
+import org.cunxin.reward.api.config.MongoConfiguration
+
+class RewardApiModule(mongoConfig: MongoConfiguration) extends ScalaModule {
+  def configure() {
+
+    bind[MongoDB].toInstance(MongoDBProvider(mongoConfig).get())
+
+    bind[UserBadgerDao].asEagerSingleton()
+    bind[BadgerDao].asEagerSingleton()
+    bind[UserDao].asEagerSingleton()
+
+    bind[UserEventService].asEagerSingleton()
+    bind[UserRewardService].asEagerSingleton()
+    bind[UserService].asEagerSingleton()
+    bind[BadgerService].asEagerSingleton()
+  }
+}
+
+case class MongoDBProvider(authMongo: MongoConfiguration) extends Provider[MongoDB] {
+  private[this] val log = LogFactory.getLog(this.getClass)
+
+  def get(): MongoDB = {
+    val db = MongoConnection(authMongo.host, authMongo.port)(authMongo.database)
+    db.authenticate(authMongo.user, authMongo.password)
+
+    log.info("MongoDB connection instantiated: %s@%s:%d (%s)".format(authMongo.user, authMongo.host, authMongo.port, authMongo.database))
+    db
+  }
+}

@@ -126,7 +126,7 @@
             <dependency>
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
-                <version>11.0.2</version>
+                <version>12.0</version>
             </dependency>
             <dependency>
                 <groupId>com.google.inject</groupId>
@@ -161,13 +161,11 @@
                 <groupId>org.testng</groupId>
                 <artifactId>testng</artifactId>
                 <version>6.3</version>
-                <scope>test</scope>
             </dependency>
             <dependency>
                 <groupId>de.flapdoodle.embedmongo</groupId>
                 <artifactId>de.flapdoodle.embedmongo</artifactId>
                 <version>1.16</version>
-                <scope>test</scope>
             </dependency>
 
         </dependencies>

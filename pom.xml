@@ -23,6 +23,7 @@
         <module>donationapp</module>
         <module>rewardapi</module>
         <module>rewardapp</module>
+        <module>config</module>
     </modules>
 
     <build>

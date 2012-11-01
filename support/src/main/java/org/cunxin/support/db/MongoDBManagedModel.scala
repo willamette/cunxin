@@ -33,9 +33,11 @@ abstract class AbstractMongoDao[T: Manifest](db: MongoDB, val collectionName: St
   protected implicit def listToSingleton(list: List[DBManagedModel[T]]) = SingletonList(list)
 
   protected def find[A <: String, B <: Any](query: (A, B)*): List[DBManagedModel[T]] = find(MongoDBObject(query: _*))
+
   protected def find[A <: String, B <: Any](query: List[(A, B)]): List[DBManagedModel[T]] = find(MongoDBObject(query))
 
   protected def find(query: DBObject, sort: DBObject): List[DBManagedModel[T]] = findQuery(Option(query), Option(sort))
+
   protected def find(query: DBObject): List[DBManagedModel[T]] = findQuery(Option(query))
 
   protected val jackson = new JsonSerDe()
@@ -64,7 +66,7 @@ abstract class AbstractMongoDao[T: Manifest](db: MongoDB, val collectionName: St
       dbObject.removeField(FIELD_VERSION)
       dbObject.removeField(FIELD_LASTUPDATEDTIME)
 
-      new MongoDBManagedModel(id, dbObject.asInstanceOf[T])
+      new MongoDBManagedModel(id, jackson.deserialize[T](jackson.serialize(dbObject)))
     }).toList
   }
 

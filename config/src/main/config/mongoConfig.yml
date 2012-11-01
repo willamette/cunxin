@@ -1,0 +1,10 @@
+http:
+  port: 9500
+  adminPort: 9501
+  rootPath: /service/*
+
+host: localhost
+port: 27017
+user: user
+password: user
+database: cunxin
