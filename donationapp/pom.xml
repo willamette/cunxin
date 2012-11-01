@@ -19,7 +19,7 @@
         <!--Project Modules-->
         <dependency>
             <groupId>org.cunxin</groupId>
-            <artifactId>db</artifactId>
+            <artifactId>support</artifactId>
         </dependency>
 
         <!--Dropwizard-->

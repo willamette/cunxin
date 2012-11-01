@@ -24,10 +24,22 @@
             <groupId>org.scalatest</groupId>
             <artifactId>scalatest_2.9.1</artifactId>
         </dependency>
+
+        <!-- Jackson -->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>1.9.10</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-core-asl</artifactId>
+            <version>1.9.10</version>
+        </dependency>
         <dependency>
             <groupId>com.fasterxml</groupId>
             <artifactId>jackson-module-scala</artifactId>
-            <version>1.9.4-RC2</version>
+            <version>1.9.3</version>
         </dependency>
 
         <!--Apache-->
@@ -38,7 +50,7 @@
 
         <!-- MongoDB -->
         <dependency>
-            <groupId>com.mongodb.casbah</groupId>
+            <groupId>org.mongodb</groupId>
             <artifactId>casbah-core_2.9.1</artifactId>
         </dependency>
 
@@ -74,6 +86,17 @@
             <artifactId>scala-guice</artifactId>
         </dependency>
 
+        <!-- Test -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>de.flapdoodle.embedmongo</groupId>
+            <artifactId>de.flapdoodle.embedmongo</artifactId>
+            <scope>test</scope>
+        </dependency>
 
     </dependencies>
 
