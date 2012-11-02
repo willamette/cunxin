@@ -13,6 +13,7 @@
 
     <artifactId>support</artifactId>
     <packaging>jar</packaging>
+    <name>Cunxin Support</name>
 
     <dependencies>
         <!-- Scala -->
@@ -29,17 +30,14 @@
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.10</version>
         </dependency>
         <dependency>
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-core-asl</artifactId>
-            <version>1.9.10</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml</groupId>
             <artifactId>jackson-module-scala</artifactId>
-            <version>1.9.4-RC2</version>
         </dependency>
 
         <!--Apache-->
