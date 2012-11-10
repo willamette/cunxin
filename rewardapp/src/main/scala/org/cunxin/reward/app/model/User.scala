@@ -6,4 +6,5 @@ import org.codehaus.jackson.annotate.{JsonProperty, JsonIgnoreProperties}
 case class User(@JsonProperty("userId") id: String,
                 @JsonProperty("points") points: Int,
                 @JsonProperty("receivedBadgerIds") receivedBadgerIds: Set[String],
+                @JsonProperty("receivedPointsIds") receivedPointsIds: Set[String],
                 @JsonProperty("version") version: Int = 1)

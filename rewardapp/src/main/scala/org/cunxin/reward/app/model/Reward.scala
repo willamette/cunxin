@@ -6,6 +6,7 @@ import scala.collection.mutable
 trait Reward {
     def id: String
     def rule: Map[String, EventStats]
+    //TODO: So ugly, code smell!!
     def qualifyRule(stats: mutable.Map[String, EventStats]): Boolean = {
         if (!stats.keySet.equals(rule.keySet)) return false
         stats.foreach {
@@ -29,7 +30,9 @@ case class Badger(@JsonProperty("badgerId") id: String,
 @JsonIgnoreProperties(ignoreUnknown = true)
 case class Points(@JsonProperty("badgerId") id: String,
                   @JsonProperty("amount") amount: Int,
+                  //Activities are associated with Project, global Project Id is -1
                   @JsonProperty("rule") rule: Map[String, EventStats],
+                  //-1 means all the time
                   @JsonProperty("days") days: Int) extends Reward {
 }
 

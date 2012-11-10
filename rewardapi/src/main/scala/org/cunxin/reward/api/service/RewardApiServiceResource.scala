@@ -13,7 +13,7 @@ import org.cunxin.reward.app.model.{UserEventType, Badger}
 @Path("/curationService")
 @Produces(Array(MediaType.APPLICATION_JSON))
 class RewardApiServiceResource @Inject()(userService: UserService,
-                                         badgerService: BadgerService,
+                                         rewardService: RewardService,
                                          userEventService: UserEventService,
                                          userRewardService: UserRewardService) {
     @POST
@@ -28,7 +28,7 @@ class RewardApiServiceResource @Inject()(userService: UserService,
     @Timed
     @Path("/registerBadger")
     def registerBadger(@Valid badger: Badger): Option[RewardApiResponse] = {
-        badgerService.createBadger(badger)
+        rewardService.createBadger(badger)
         Some(RewardApiResponse(true, "Successful"))
     }
 
@@ -36,22 +36,22 @@ class RewardApiServiceResource @Inject()(userService: UserService,
     @Timed
     @Path("/recordEvent")
     def recordEvent(@Valid req: CunxinRewardEventRequest): Option[RewardApiResponse] = {
-        userEventService.recordEvent(req.userId, req.eventType)
+        userEventService.recordEvent(req.userId, req.projectId, req.eventType)
         Some(RewardApiResponse(true, "Successful"))
     }
 
     @POST
     @Timed
     @Path("/getBadgerByUser")
-    def getBadgerByUser(@Valid req: CunxinRewardBadgerRequest): Option[Badger] = userRewardService.getBadger(req.userId, req.badgerId)
+    def getBadgerByUser(@Valid req: CunxinRewardBadgerRequest): Option[Badger] = userRewardService.checkBadgerStatus(req.userId, req.badgerId)
 
     @POST
     @Timed
     @Path("/getAllBadgerByUser")
-    def getAllBadgerByUser(@Valid userId: String): Option[Set[Badger]] = Option(userRewardService.getAllBadger(userId))
+    def getAllBadgerByUser(@Valid userId: String): Option[Set[Badger]] = Option(userRewardService.getAllReceivedBadger(userId))
 
 }
 
-case class CunxinRewardEventRequest(userId: String, eventType: UserEventType)
+case class CunxinRewardEventRequest(userId: String, projectId: String, eventType: UserEventType)
 
 case class CunxinRewardBadgerRequest(userId: String, badgerId: String)

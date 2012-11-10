@@ -1,16 +1,19 @@
 package org.cunxin.reward.app.service
 
 import com.google.inject.Inject
-import org.cunxin.reward.app.dao.{UserDailyStatsDao, UserAllTimeDao, BadgerDao, UserDao}
-import org.cunxin.reward.app.model.{User, Badger}
+import org.cunxin.reward.app.dao._
 import org.cunxin.support.db.DBManagedModel
+import org.cunxin.reward.app.model.{Points, Badger, User}
+import scala.Some
+import java.util.Date
 
 class UserRewardService @Inject()(userDao: UserDao,
                                   badgerDao: BadgerDao,
+                                  pointsDao: PointsDao,
                                   userAllTimeDao: UserAllTimeDao,
                                   userDailyDao: UserDailyStatsDao) {
 
-    def getBadger(userId: String, badgerId: String): Option[Badger] = {
+    def checkBadgerStatus(userId: String, badgerId: String): Option[Badger] = {
         userDao.findUserById(userId) match {
             case None => None
             case Some(ud) => {
@@ -23,21 +26,61 @@ class UserRewardService @Inject()(userDao: UserDao,
         }
     }
 
-    def getAllBadger(userId: String): Set[Badger] = {
+    def checkAllBadgerStatuses(userId: String): List[Badger] = {
+        badgerDao.findAll().flatMap(dbM => checkBadgerStatus(userId, dbM.data.id))
+    }
+
+    def getAllReceivedBadger(userId: String): Set[Badger] = {
         userDao.findUserById(userId) match {
             case None => Set()
             case Some(ud) => ud.data.receivedBadgerIds.map(badgerId => badgerDao.findBadgerById(badgerId).map(_.data)).flatten
         }
     }
 
-    def getPoints(userId: String, projectId: String): Int = {
-
+    def getProjectPoints(userId: String): Int = {
+        userDao.findUserById(userId) match {
+            case None => -1
+            case Some(ud) => {
+                val newQualifiedPoints = pointsDao.findAll().
+                        filterNot(p => ud.data.receivedPointsIds.contains(p.data.id)).
+                        flatMap(p => calculateQualifiedPoints(userId, p))
+                val newQualifiedPointsAmount = newQualifiedPoints.map(_.amount).sum
+                userDao.update(ud.copy(data = ud.data.copy(
+                    points = newQualifiedPointsAmount + ud.data.points,
+                    receivedPointsIds = ud.data.receivedPointsIds ++ newQualifiedPoints.map(_.id).toSet))
+                )
+                newQualifiedPointsAmount + ud.data.points
+            }
+        }
     }
 
-    def isQualifiedForBadger(userDataModel: DBManagedModel[User], badger: Badger): Boolean = {
+    private[this] def calculateQualifiedPoints(userId: String, points: DBManagedModel[Points]): Option[Points] = {
+        if (points.data.days == -1)
+            userAllTimeDao.findUserAllTimeStatsByUserId(userId) match {
+                case None => None
+                case Some(allTimeStat) => if (points.data.qualifyRule(allTimeStat.data.projectStats)) points.data.amount else 0
+            }
+        else {
+            //Only calculate the latest 1 weeks. full logs scan is so expensive
+            val today = new Date()
+            today.setHours(0)
+            today.setMinutes(0)
+            today.setSeconds(0)
+            val startDate = new Date(today.getTime - 7 * 24 * 60 * 60 * 1000)
+            val stats = userDailyDao.findUserStatsByDate(userId, startDate)
+            stats.sliding()
+        }
+    }
+
+    private[this] def isQualifiedForBadger(userDataModel: DBManagedModel[User], badger: Badger): Boolean = {
         userAllTimeDao.findUserAllTimeStatsByUserId(userDataModel.data.id) match {
             case None => false
-            case Some(uald) => badger.qualifyRule(uald.data.projectStats)
+            case Some(uald) => {
+                val qualified = badger.qualifyRule(uald.data.projectStats)
+                if (qualified)
+                    userDao.update(userDataModel.copy(data = userDataModel.data.copy(receivedBadgerIds = userDataModel.data.receivedBadgerIds + badger.id)))
+                qualified
+            }
         }
     }
 
