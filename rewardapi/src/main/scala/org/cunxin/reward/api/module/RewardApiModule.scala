@@ -1,7 +1,7 @@
 package org.cunxin.reward.api.module
 
 import org.cunxin.reward.app.dao.{UserDao, BadgerDao, UserBadgerDao}
-import org.cunxin.reward.app.service.{BadgerService, UserService, UserRewardService, UserEventService}
+import org.cunxin.reward.app.service.{RewardService, UserService, UserRewardService, UserEventService}
 import uk.me.lings.scalaguice.ScalaModule
 import com.google.inject.Provider
 import com.mongodb.casbah.{MongoConnection, MongoDB}

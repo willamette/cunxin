@@ -21,7 +21,7 @@ class BadgerSystemTest extends EmbedDb {
       bind[UserEventService].asEagerSingleton()
       bind[UserRewardService].asEagerSingleton()
       bind[UserService].asEagerSingleton()
-      bind[BadgerService].asEagerSingleton()
+      bind[RewardService].asEagerSingleton()
     }
   }
 
@@ -35,7 +35,7 @@ class BadgerSystemTest extends EmbedDb {
     val userService = injector.instance[UserService]
     val userEventService = injector.instance[UserEventService]
     val userRewardService = injector.instance[UserRewardService]
-    val badgerService = injector.instance[BadgerService]
+    val badgerService = injector.instance[RewardService]
 
     val badger = Badger("1", "FirstBlood", Map(UserEventType.DONATION -> 1, UserEventType.SUPPORT_CLICK -> 2))
     val userId = "1"

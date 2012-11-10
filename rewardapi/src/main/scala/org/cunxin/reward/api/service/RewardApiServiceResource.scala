@@ -4,7 +4,7 @@ import javax.ws.rs.{Path, POST, Produces}
 import scala.Array
 import javax.ws.rs.core.MediaType
 import com.yammer.metrics.annotation.Timed
-import org.cunxin.reward.app.service.{BadgerService, UserService, UserRewardService, UserEventService}
+import org.cunxin.reward.app.service.{RewardService, UserService, UserRewardService, UserEventService}
 import com.google.inject.Inject
 import javax.validation.Valid
 import org.cunxin.reward.api.model.RewardApiResponse
