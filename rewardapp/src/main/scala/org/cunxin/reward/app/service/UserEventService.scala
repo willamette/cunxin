@@ -14,7 +14,7 @@ class UserEventService @Inject()(userDao: UserDao,
 
     val logger = LogFactory.getLog(this.getClass)
 
-    def recordEvent(userId: String, projectId: String, eventType: UserEventType) {
+    def recordEvent(userId: String, projectId: String, eventType: UserEventType, params: Map[String, String]) {
         userDao.findUserById(userId) match {
             case None => logger.error("User %s doesn't exist".format(userId))
             case Some(user) => {

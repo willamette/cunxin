@@ -3,13 +3,13 @@ package org.cunxin.reward.app.service
 import com.google.inject.Inject
 import org.cunxin.reward.app.dao._
 import org.cunxin.support.db.DBManagedModel
+import org.cunxin.reward.app.model.reward.badger.Badger
+import org.cunxin.reward.app.model.reward.points.Points
 import org.cunxin.reward.app.model.{Points, Badger, User}
 import scala.Some
 import java.util.Date
 
 class UserRewardService @Inject()(userDao: UserDao,
-                                  badgerDao: BadgerDao,
-                                  pointsDao: PointsDao,
                                   userAllTimeDao: UserAllTimeDao,
                                   userDailyDao: UserDailyStatsDao) {
 
@@ -44,12 +44,6 @@ class UserRewardService @Inject()(userDao: UserDao,
                 val newQualifiedPoints = pointsDao.findAll().
                         filterNot(p => ud.data.receivedPointsIds.contains(p.data.id)).
                         flatMap(p => calculateQualifiedPoints(userId, p))
-                val newQualifiedPointsAmount = newQualifiedPoints.map(_.amount).sum
-                userDao.update(ud.copy(data = ud.data.copy(
-                    points = newQualifiedPointsAmount + ud.data.points,
-                    receivedPointsIds = ud.data.receivedPointsIds ++ newQualifiedPoints.map(_.id).toSet))
-                )
-                newQualifiedPointsAmount + ud.data.points
             }
         }
     }
@@ -58,7 +52,7 @@ class UserRewardService @Inject()(userDao: UserDao,
         if (points.data.days == -1)
             userAllTimeDao.findUserAllTimeStatsByUserId(userId) match {
                 case None => None
-                case Some(allTimeStat) => if (points.data.qualifyRule(allTimeStat.data.projectStats)) points.data.amount else 0
+                case Some(allTimeStat) => if (points.data.qualifyRule(allTimeStat.data.projectStats)) Some(points.data) else None
             }
         else {
             //Only calculate the latest 1 weeks. full logs scan is so expensive

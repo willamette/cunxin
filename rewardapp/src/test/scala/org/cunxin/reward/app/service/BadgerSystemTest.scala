@@ -6,6 +6,7 @@ import uk.me.lings.scalaguice.ScalaModule
 import org.cunxin.reward.app.dao.{UserDao, BadgerDao, UserBadgerDao}
 import uk.me.lings.scalaguice.InjectorExtensions.ScalaInjector
 import com.google.inject.Guice
+import org.cunxin.reward.app.model.reward.badger.Badger
 import org.cunxin.reward.app.model.{UserEventType, Badger}
 import org.testng.Assert
 

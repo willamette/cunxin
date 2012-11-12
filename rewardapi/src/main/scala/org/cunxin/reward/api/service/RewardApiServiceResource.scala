@@ -8,6 +8,7 @@ import org.cunxin.reward.app.service.{RewardService, UserService, UserRewardServ
 import com.google.inject.Inject
 import javax.validation.Valid
 import org.cunxin.reward.api.model.RewardApiResponse
+import org.cunxin.reward.app.model.reward.badger.Badger
 import org.cunxin.reward.app.model.{UserEventType, Badger}
 
 @Path("/curationService")

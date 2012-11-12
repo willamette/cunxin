@@ -9,6 +9,7 @@ trait UserStats {
     def projectStats: mutable.HashMap[String, EventStats]
 }
 
+//TODO: Code Smell
 @JsonIgnoreProperties(ignoreUnknown = true)
 case class EventStats(@JsonProperty("stats") stats: mutable.HashMap[UserEventType, Int])
 
