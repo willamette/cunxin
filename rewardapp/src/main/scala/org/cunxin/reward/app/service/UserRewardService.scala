@@ -17,7 +17,7 @@ class UserRewardService @Inject()(userAllTimeDao: UserAllTimeDao,
         val pastAllTimeActivities = userAllTimeDao.findUserAllTimeStatsByUserId(userId).map(_.data).getOrElse(
             UserAllTimeStats(userId, new mutable.HashMap[String, EventStats], EventStats(new mutable.HashMap[UserEventType, Int]()), new Date())
         )
-        val pastUserActivities = userActivityDao.findUserActivitiesByPeriod(userId).map(_.data)
+        val pastUserActivities = userActivityDao.findUserActivities(userId).map(_.data)
         ProcessChain.getAllRewards(userEvent).map {
             r => r.id -> r.publish(userId, projectId, userEvent, data, pastAllTimeActivities, pastUserActivities).toString
         }.toMap
