@@ -7,6 +7,7 @@ import java.util.Date
 trait UserStats {
     def userId: String
     def projectStats: mutable.HashMap[String, EventStats]
+    def allEventStats: EventStats
 }
 
 //TODO: Code Smell
@@ -16,9 +17,12 @@ case class EventStats(@JsonProperty("stats") stats: mutable.HashMap[UserEventTyp
 @JsonIgnoreProperties(ignoreUnknown = true)
 case class UserAllTimeStats(@JsonProperty("userId") userId: String,
                             @JsonProperty("projectStats") projectStats: mutable.HashMap[String, EventStats],
-                            @JsonProperty("lastUpdateDate") lastUpdateDate: Date)
+                            @JsonProperty("allEventStats") allEventStats: EventStats,
+                            @JsonProperty("lastUpdateDate") lastUpdateDate: Date) extends UserStats
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-case class UserDailyStats(@JsonProperty("userId") userId: String,
-                          @JsonProperty("projectStats") projectStats: mutable.HashMap[String, EventStats],
-                          @JsonProperty("date") date: Date)
+case class UserActivity(@JsonProperty("userId") userId: String,
+                        @JsonProperty("projectId") projectId: String,
+                        @JsonProperty("event") event: UserEventType,
+                        @JsonProperty("data") data: Map[String, List[String]],
+                        @JsonProperty("date") date: Date)

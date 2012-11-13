@@ -1,7 +1,9 @@
 package org.cunxin.reward.app.model;
 
 public enum UserEventType {
-    SUPPORT_CLICK,
+    SUPPORT,
     WEIBO_SHARE,
+    DONATION_SHARE,
+    LOGIN,
     DONATION
 }

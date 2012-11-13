@@ -4,11 +4,14 @@ import badger.Badger
 import points.Points
 import collection.mutable
 import org.apache.commons.logging.LogFactory
+import org.cunxin.reward.app.model.UserEventType
 
-object RewardsIterator {
+object ProcessChain {
     private[this] val log = LogFactory.getLog(this.getClass)
     private[this] val badgerMap = mutable.HashMap[String, Badger]()
     private[this] val pointsMap = mutable.HashMap[String, Points]()
+
+    private[this] val rewardSubscriptionMap = mutable.HashMap[UserEventType, mutable.HashSet[Reward]]()
 
     def registerBadger(badger: Badger) {
         log.info("Registering badger id: " + badger.id)
@@ -20,6 +23,15 @@ object RewardsIterator {
         pointsMap.put(points.id, points)
     }
 
+    def subscribeEvents(reward: Reward, events: List[UserEventType]) {
+        events.foreach(e => {
+            val rewards = rewardSubscriptionMap.getOrElseUpdate(e, new mutable.HashSet[Reward]())
+            rewards.add(reward)
+        })
+    }
+
     def getAllBadgers = badgerMap.values.toList
     def getAllPoints = pointsMap.values.toList
+
+    def getAllRewards(eventType: UserEventType) = rewardSubscriptionMap.getOrElse(eventType, mutable.HashSet())
 }

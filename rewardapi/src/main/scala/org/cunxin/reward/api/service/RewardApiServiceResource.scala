@@ -1,58 +1,27 @@
 package org.cunxin.reward.api.service
 
-import javax.ws.rs.{Path, POST, Produces}
-import scala.Array
-import javax.ws.rs.core.MediaType
-import com.yammer.metrics.annotation.Timed
-import org.cunxin.reward.app.service.{RewardService, UserService, UserRewardService, UserEventService}
-import com.google.inject.Inject
 import javax.validation.Valid
-import org.cunxin.reward.api.model.RewardApiResponse
-import org.cunxin.reward.app.model.reward.badger.Badger
-import org.cunxin.reward.app.model.{UserEventType, Badger}
+import javax.ws.rs.{POST, Path, Produces}
+import javax.ws.rs.core.MediaType
+import com.google.inject.Inject
+import com.yammer.metrics.annotation.Timed
+import org.cunxin.reward.app.service.UserEventService
+import org.cunxin.reward.app.model.UserEventType
 
-@Path("/curationService")
+@Path("/rewardService")
 @Produces(Array(MediaType.APPLICATION_JSON))
-class RewardApiServiceResource @Inject()(userService: UserService,
-                                         rewardService: RewardService,
-                                         userEventService: UserEventService,
-                                         userRewardService: UserRewardService) {
-    @POST
-    @Timed
-    @Path("/registerUserId")
-    def registerUserId(@Valid userId: String): Option[RewardApiResponse] = {
-        userService.createNewUser(userId)
-        Some(RewardApiResponse(true, "Successful"))
-    }
-
-    @POST
-    @Timed
-    @Path("/registerBadger")
-    def registerBadger(@Valid badger: Badger): Option[RewardApiResponse] = {
-        rewardService.createBadger(badger)
-        Some(RewardApiResponse(true, "Successful"))
-    }
+class RewardApiServiceResource @Inject()(userEventService: UserEventService) {
 
     @POST
     @Timed
     @Path("/recordEvent")
-    def recordEvent(@Valid req: CunxinRewardEventRequest): Option[RewardApiResponse] = {
-        userEventService.recordEvent(req.userId, req.projectId, req.eventType)
-        Some(RewardApiResponse(true, "Successful"))
+    def recordEvent(@Valid req: CunxinRewardApiRequest): Option[CunxinRewardApiResponse] = {
+        val result = userEventService.recordEvent(req.userId, req.projectId, req.eventType, req.params)
+        Some(CunxinRewardApiResponse(result))
     }
-
-    @POST
-    @Timed
-    @Path("/getBadgerByUser")
-    def getBadgerByUser(@Valid req: CunxinRewardBadgerRequest): Option[Badger] = userRewardService.checkBadgerStatus(req.userId, req.badgerId)
-
-    @POST
-    @Timed
-    @Path("/getAllBadgerByUser")
-    def getAllBadgerByUser(@Valid userId: String): Option[Set[Badger]] = Option(userRewardService.getAllReceivedBadger(userId))
 
 }
 
-case class CunxinRewardEventRequest(userId: String, projectId: String, eventType: UserEventType)
+case class CunxinRewardApiRequest(userId: String, projectId: String, eventType: UserEventType, params: Map[String, List[String]])
 
-case class CunxinRewardBadgerRequest(userId: String, badgerId: String)
+case class CunxinRewardApiResponse(result: Map[String, String])
