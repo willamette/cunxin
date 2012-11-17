@@ -8,7 +8,7 @@ trait Reward {
     def observingEvents: List[UserEventType]
     def register()
 
-    def publish(userId: String,
+    def onPublish(userId: String,
                 projectId: String,
                 eventType: UserEventType,
                 data: Map[String, List[String]],

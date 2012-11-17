@@ -13,7 +13,7 @@
     <artifactId>donationapp</artifactId>
     <packaging>jar</packaging>
 
-    <name>Cunxin Donation Application Services</name>
+    <name>Cunxin Donation Application Service</name>
 
     <dependencies>
         <!--Project Modules-->

@@ -36,15 +36,35 @@ class RewardSystemTest extends EmbedDb {
         val userId = "userId"
         val projectId = "projectId"
 
-        userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
-        userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
-        userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
-        userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
-        val result = userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
-        Assert.assertEquals(result(supportPoints.id), "1")
+        val result1 = userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
         val result2 = userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
-        Assert.assertEquals(result2(supportPoints.id), "0")
+        val result3 = userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
+        val result4 = userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
+        val result5 = userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
+        val result6 = userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
+
+        Assert.assertEquals(result1(supportPoints.id), "1")
+        Assert.assertEquals(result2(supportPoints.id), "1")
+        Assert.assertEquals(result3(supportPoints.id), "1")
+        Assert.assertEquals(result4(supportPoints.id), "1")
+        Assert.assertEquals(result5(supportPoints.id), "1")
+        Assert.assertEquals(result6(supportPoints.id), "0")
 
     }
 
+    def testDonationPoints() {
+        val injector = new ScalaInjector(Guice.createInjector(module, mongoModule))
+        val userEventService = injector.instance[UserEventService]
+        val donationPoints = injector.instance[DonationPoints]
+
+        val userId = "userId"
+        val projectId = "projectId"
+
+        val result1 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION, Map("amount" -> List("500")))
+        val result2 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION, Map("amount" -> List("500")))
+
+        Assert.assertEquals(result1(donationPoints.id), "501")
+        Assert.assertEquals(result2(donationPoints.id), "500")
+
+    }
 }

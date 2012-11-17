@@ -19,7 +19,7 @@ class UserRewardService @Inject()(userAllTimeDao: UserAllTimeDao,
         )
         val pastUserActivities = userActivityDao.findUserActivities(userId).map(_.data)
         ProcessChain.getAllRewards(userEvent).map {
-            r => r.id -> r.publish(userId, projectId, userEvent, data, pastAllTimeActivities, pastUserActivities).toString
+            r => r.id -> r.onPublish(userId, projectId, userEvent, data, pastAllTimeActivities, pastUserActivities).toString
         }.toMap
     }
 

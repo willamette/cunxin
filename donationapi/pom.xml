@@ -12,7 +12,7 @@
     <artifactId>donationapi</artifactId>
     <packaging>jar</packaging>
 
-    <name>Cunxin Donation API Services</name>
+    <name>Cunxin Donation Api Service</name>
 
     <dependencies>
         <!--Project Modules-->

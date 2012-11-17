@@ -18,10 +18,10 @@ class DonationPoints extends Points {
 
     def observingEvents = List(UserEventType.DONATION)
 
-    def publish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]],
-                pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
+    def onPublish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]],
+                  pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
         val basicPoints = {
-            if (pastAllTimeStats.projectStats.contains(projectId) ||
+            if (pastAllTimeStats.projectStats.contains(projectId) &&
                     pastAllTimeStats.projectStats(projectId).stats.contains(UserEventType.DONATION))
                 0
             else
@@ -35,19 +35,17 @@ class DonationPoints extends Points {
 class ShareToWeiBoPoints extends Points {
     def id = "shareToWeiBo"
     def observingEvents = List(UserEventType.WEIBO_SHARE)
-    def publish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]],
-                pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
+    def onPublish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]],
+                  pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
         0
     }
 }
 
 class ShareAfterDonationPoints extends Points {
     def id = "shareAfterDonationPoints"
-
     def observingEvents = List(UserEventType.DONATION_SHARE)
-
-    def publish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]],
-                pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
+    def onPublish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]],
+                  pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
         val projectStats = pastAllTimeStats.projectStats.getOrElse(projectId, EventStats(new mutable.HashMap[UserEventType, Int]())).stats.getOrElse(UserEventType.DONATION_SHARE, 0)
         if (projectStats == 0) 4 else 0
     }
@@ -56,7 +54,7 @@ class ShareAfterDonationPoints extends Points {
 class SupportPoints extends Points {
     def id = "supportPoints"
     def observingEvents = List(UserEventType.SUPPORT)
-    def publish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]], pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
+    def onPublish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]], pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
         val today = new Date()
         today.setHours(0)
         today.setMinutes(0)

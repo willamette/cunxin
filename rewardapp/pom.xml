@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>rewardapp</artifactId>
-    <name>Cunxin Reward Application</name>
+    <name>Cunxin Reward Application Service</name>
 
     <dependencies>
         <!--Project Modules-->
