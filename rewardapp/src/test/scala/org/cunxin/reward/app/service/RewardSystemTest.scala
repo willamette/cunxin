@@ -67,4 +67,20 @@ class RewardSystemTest extends EmbedDb {
         Assert.assertEquals(result2(donationPoints.id), "500")
 
     }
+
+    def testDonationSharePoints() {
+        val injector = new ScalaInjector(Guice.createInjector(module, mongoModule))
+        val userEventService = injector.instance[UserEventService]
+        val shareAfterDonationPoints = injector.instance[ShareAfterDonationPoints]
+
+        val userId = "userId"
+        val projectId = "projectId"
+
+        val result1 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION_SHARE, Map())
+        val result2 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION_SHARE, Map())
+
+        Assert.assertEquals(result1(shareAfterDonationPoints.id), "1")
+        Assert.assertEquals(result2(shareAfterDonationPoints.id), "0")
+
+    }
 }
