@@ -4,7 +4,7 @@ import com.google.common.cache.CacheBuilderSpec
 import com.google.inject.Guice
 import uk.me.lings.scalaguice.InjectorExtensions.ScalaInjector
 import com.yammer.dropwizard.config.Environment
-import org.cunxin.reward.api.module.{RewardInstancesModule, RewardApiModule}
+import org.cunxin.reward.api.module.{HttpStrategyModule, RewardInstancesModule, RewardApiModule}
 import org.cunxin.reward.api.config.MongoConfiguration
 import org.cunxin.reward.api.service.{RewardApiServiceResource, ScalaService}
 
@@ -12,7 +12,7 @@ object RewardApiServer extends ScalaService[MongoConfiguration]("Reward Api Serv
     val cacheSpec = CacheBuilderSpec.disableCaching()
 
     def initialize(mongoConfig: MongoConfiguration, env: Environment) {
-        val injector = new ScalaInjector(Guice.createInjector(new RewardApiModule(mongoConfig), new RewardInstancesModule))
+        val injector = new ScalaInjector(Guice.createInjector(new RewardApiModule(mongoConfig), new RewardInstancesModule, new HttpStrategyModule))
         env.addResource(injector.instance[RewardApiServiceResource])
     }
 }

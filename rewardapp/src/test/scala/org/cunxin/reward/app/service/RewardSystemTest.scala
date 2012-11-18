@@ -9,12 +9,21 @@ import org.cunxin.support.sandbox.EmbedDb
 import org.cunxin.reward.app.dao.{UserAllTimeDao, UserActivityDao}
 import org.cunxin.reward.app.model.UserEventType
 import org.cunxin.reward.app.model.reward.points._
+import org.cunxin.support.util.{HttpDataStrategyImpl, HttpDataStrategy}
+import org.apache.http.client.HttpClient
+import org.apache.http.params.{CoreConnectionPNames, BasicHttpParams}
+import org.apache.http.impl.client.DefaultHttpClient
+import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
 
 @Test
 class RewardSystemTest extends EmbedDb {
 
     private[this] val module = new ScalaModule {
         def configure() {
+            bind[HttpClient].toInstance(createHttpClient)
+            bind[HttpDataStrategyImpl].asEagerSingleton()
+            bind[HttpDataStrategy].to[HttpDataStrategyImpl]
+
             bind[UserActivityDao].asEagerSingleton()
             bind[UserAllTimeDao].asEagerSingleton()
 
@@ -25,6 +34,19 @@ class RewardSystemTest extends EmbedDb {
             bind[SupportPoints].asEagerSingleton()
             bind[ShareToWeiBoPoints].asEagerSingleton()
             bind[DonationPoints].asEagerSingleton()
+        }
+
+        private[this] def createHttpClient: HttpClient = {
+            val params = new BasicHttpParams
+            params.setIntParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 60 * 1000) //1 minute
+            new DefaultHttpClient(createConnectionManager, params)
+        }
+
+        private[this] def createConnectionManager: ThreadSafeClientConnManager = {
+            val m = new ThreadSafeClientConnManager()
+            m.setDefaultMaxPerRoute(10)
+            m.setMaxTotal(10000)
+            m
         }
     }
 
@@ -79,7 +101,7 @@ class RewardSystemTest extends EmbedDb {
         val result1 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION_SHARE, Map())
         val result2 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION_SHARE, Map())
 
-        Assert.assertEquals(result1(shareAfterDonationPoints.id), "1")
+        Assert.assertEquals(result1(shareAfterDonationPoints.id), "4")
         Assert.assertEquals(result2(shareAfterDonationPoints.id), "0")
 
     }
