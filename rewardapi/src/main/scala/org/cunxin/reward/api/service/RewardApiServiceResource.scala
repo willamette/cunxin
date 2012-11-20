@@ -13,21 +13,21 @@ import org.cunxin.reward.app.model.UserEventType
 class RewardApiServiceResource @Inject()(userEventService: UserEventService,
                                          userInfoService: UserInfoService) {
 
-    @POST
-    @Timed
-    @Path("/recordEvent")
-    def recordEvent(@Valid req: CunxinRewardApiRequest): Option[CunxinRewardApiResponse] = {
-        val result = userEventService.recordEvent(req.userId, req.projectId, req.eventType, req.params)
-        Some(CunxinRewardApiResponse(result))
-    }
+  @POST
+  @Timed
+  @Path("/recordEvent")
+  def recordEvent(@Valid req: CunxinRewardApiRequest): Option[CunxinRewardApiResponse] = {
+    val result = userEventService.recordEvent(req.userId, req.projectId, req.eventType, req.params)
+    Some(CunxinRewardApiResponse(result))
+  }
 
-    @POST
-    @Timed
-    @Path("/getPoints")
-    def getPoints(@Valid req: CunxinRewardApiRequest): Option[CunxinRewardApiResponse] = {
-        val result = userInfoService.getPoints(req.userId)
-        Some(CunxinRewardApiResponse(Map("points" -> result.toString)))
-    }
+  @POST
+  @Timed
+  @Path("/getPoints")
+  def getPoints(@Valid req: CunxinRewardApiRequest): Option[CunxinRewardApiResponse] = {
+    val result = userInfoService.getPoints(req.userId)
+    Some(CunxinRewardApiResponse(Map("points" -> result.toString)))
+  }
 
 }
 

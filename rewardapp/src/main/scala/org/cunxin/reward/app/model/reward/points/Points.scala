@@ -4,8 +4,8 @@ import com.google.inject.Inject
 import org.cunxin.reward.app.model.reward.{ProcessChain, Reward}
 
 abstract class Points extends Reward {
-    @Inject
-    def register() {
-        ProcessChain.registerPoints(this)
-    }
+  @Inject
+  def register() {
+    ProcessChain.registerPoints(this)
+  }
 }

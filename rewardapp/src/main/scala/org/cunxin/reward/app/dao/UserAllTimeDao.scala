@@ -7,8 +7,8 @@ import org.cunxin.reward.app.model.UserAllTimeStats
 
 class UserAllTimeDao @Inject()(db: MongoDB) extends AbstractMongoDao[UserAllTimeStats](db, "useralltimestats", version = 1)
 with MongoRWDao[UserAllTimeStats] {
-    ensureIndex("userId" -> 1, "idx_userId", unique = true)
+  ensureIndex("userId" -> 1, "idx_userId", unique = true)
 
-    def findUserAllTimeStatsByUserId(id: String) = find("userId" -> id).headOption
+  def findUserAllTimeStatsByUserId(id: String) = find("userId" -> id).headOption
 
 }
