@@ -1,12 +1,12 @@
 package org.cunxin.reward.api.module
 
-import org.cunxin.reward.app.service.{UserRewardService, UserEventService}
+import org.cunxin.reward.app.service.{UserInfoService, UserRewardService, UserEventService}
 import uk.me.lings.scalaguice.ScalaModule
 import com.google.inject.Provider
 import com.mongodb.casbah.{MongoConnection, MongoDB}
 import org.apache.commons.logging.LogFactory
 import org.cunxin.reward.api.config.MongoConfiguration
-import org.cunxin.reward.app.dao.{UserAllTimeDao, UserActivityDao}
+import org.cunxin.reward.app.dao.{UserInfoDao, UserAllTimeDao, UserActivityDao}
 
 class RewardApiModule(mongoConfig: MongoConfiguration) extends ScalaModule {
     def configure() {
@@ -15,9 +15,11 @@ class RewardApiModule(mongoConfig: MongoConfiguration) extends ScalaModule {
 
         bind[UserActivityDao].asEagerSingleton()
         bind[UserAllTimeDao].asEagerSingleton()
+        bind[UserInfoDao].asEagerSingleton()
 
         bind[UserEventService].asEagerSingleton()
         bind[UserRewardService].asEagerSingleton()
+        bind[UserInfoService].asEagerSingleton()
     }
 }
 

@@ -9,6 +9,7 @@ import org.cunxin.reward.app.dao.{UserActivityDao, UserAllTimeDao}
 
 class UserEventService @Inject()(userAllTimeDao: UserAllTimeDao,
                                  userActivityDao: UserActivityDao,
+                                 userService: UserInfoService,
                                  userRewardService: UserRewardService) {
 
     val logger = LogFactory.getLog(this.getClass)
@@ -17,6 +18,7 @@ class UserEventService @Inject()(userAllTimeDao: UserAllTimeDao,
         val result = userRewardService.publishActivity(userId, projectId, eventType, params)
         saveActivity(userId, projectId, eventType, params)
         updateAllTimeStats(userId, projectId, eventType)
+        result.values.foreach(s => userService.updatePoints(userId, s.toInt))
         result
     }
 
