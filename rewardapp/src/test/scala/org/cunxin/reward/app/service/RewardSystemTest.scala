@@ -14,6 +14,7 @@ import org.apache.http.client.HttpClient
 import org.apache.http.params.{CoreConnectionPNames, BasicHttpParams}
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
+import java.util.concurrent.{Executors, ScheduledExecutorService}
 
 @Test
 class RewardSystemTest extends EmbedDb {
@@ -36,6 +37,8 @@ class RewardSystemTest extends EmbedDb {
       bind[SupportPoints].asEagerSingleton()
       bind[ShareToWeiBoPoints].asEagerSingleton()
       bind[DonationPoints].asEagerSingleton()
+
+      bind[ScheduledExecutorService].toInstance(Executors.newScheduledThreadPool(4, Executors.defaultThreadFactory()))
     }
 
     private[this] def createHttpClient: HttpClient = {
