@@ -6,9 +6,7 @@ import java.util.Date
 
 trait UserStats {
   def userId: String
-
   def projectStats: mutable.HashMap[String, EventStats]
-
   def allEventStats: EventStats
 }
 

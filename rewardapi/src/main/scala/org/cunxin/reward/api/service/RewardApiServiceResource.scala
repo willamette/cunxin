@@ -5,12 +5,13 @@ import javax.ws.rs.{POST, Path, Produces}
 import javax.ws.rs.core.MediaType
 import com.google.inject.Inject
 import com.yammer.metrics.annotation.Timed
-import org.cunxin.reward.app.service.UserEventService
+import org.cunxin.reward.app.service.{UserInfoService, UserEventService}
 import org.cunxin.reward.app.model.UserEventType
 
 @Path("/rewardService")
 @Produces(Array(MediaType.APPLICATION_JSON))
-class RewardApiServiceResource @Inject()(userEventService: UserEventService) {
+class RewardApiServiceResource @Inject()(userEventService: UserEventService,
+                                         userInfoService: UserInfoService) {
 
   @POST
   @Timed
@@ -18,6 +19,14 @@ class RewardApiServiceResource @Inject()(userEventService: UserEventService) {
   def recordEvent(@Valid req: CunxinRewardApiRequest): Option[CunxinRewardApiResponse] = {
     val result = userEventService.recordEvent(req.userId, req.projectId, req.eventType, req.params)
     Some(CunxinRewardApiResponse(result))
+  }
+
+  @POST
+  @Timed
+  @Path("/getPoints")
+  def getPoints(@Valid req: CunxinRewardApiRequest): Option[CunxinRewardApiResponse] = {
+    val result = userInfoService.getPoints(req.userId)
+    Some(CunxinRewardApiResponse(Map("points" -> result.toString)))
   }
 
 }

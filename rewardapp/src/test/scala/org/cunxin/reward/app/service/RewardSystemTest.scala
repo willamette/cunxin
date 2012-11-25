@@ -6,7 +6,7 @@ import org.testng.annotations.Test
 import uk.me.lings.scalaguice.ScalaModule
 import uk.me.lings.scalaguice.InjectorExtensions.ScalaInjector
 import org.cunxin.support.sandbox.EmbedDb
-import org.cunxin.reward.app.dao.{UserAllTimeDao, UserActivityDao}
+import org.cunxin.reward.app.dao.{UserInfoDao, UserAllTimeDao, UserActivityDao}
 import org.cunxin.reward.app.model.UserEventType
 import org.cunxin.reward.app.model.reward.points._
 import org.cunxin.support.util.{HttpDataStrategyImpl, HttpDataStrategy}
@@ -14,6 +14,7 @@ import org.apache.http.client.HttpClient
 import org.apache.http.params.{CoreConnectionPNames, BasicHttpParams}
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
+import java.util.concurrent.{Executors, ScheduledExecutorService}
 
 @Test
 class RewardSystemTest extends EmbedDb {
@@ -26,14 +27,18 @@ class RewardSystemTest extends EmbedDb {
 
       bind[UserActivityDao].asEagerSingleton()
       bind[UserAllTimeDao].asEagerSingleton()
+      bind[UserInfoDao].asEagerSingleton()
 
       bind[UserEventService].asEagerSingleton()
       bind[UserRewardService].asEagerSingleton()
+      bind[UserInfoService].asEagerSingleton()
 
       bind[ShareAfterDonationPoints].asEagerSingleton()
       bind[SupportPoints].asEagerSingleton()
       bind[ShareToWeiBoPoints].asEagerSingleton()
       bind[DonationPoints].asEagerSingleton()
+
+      bind[ScheduledExecutorService].toInstance(Executors.newScheduledThreadPool(4, Executors.defaultThreadFactory()))
     }
 
     private[this] def createHttpClient: HttpClient = {
@@ -53,10 +58,11 @@ class RewardSystemTest extends EmbedDb {
   def testSupportPoints() {
     val injector = new ScalaInjector(Guice.createInjector(module, mongoModule))
     val userEventService = injector.instance[UserEventService]
+    val userInfoService = injector.instance[UserInfoService]
     val supportPoints = injector.instance[SupportPoints]
 
-    val userId = "userId"
-    val projectId = "projectId"
+    val userId = "userId1"
+    val projectId = "projectId1"
 
     val result1 = userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
     val result2 = userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
@@ -72,15 +78,18 @@ class RewardSystemTest extends EmbedDb {
     Assert.assertEquals(result5(supportPoints.id), "1")
     Assert.assertEquals(result6(supportPoints.id), "0")
 
+    Assert.assertEquals(userInfoService.getPoints(userId), 5)
+
   }
 
   def testDonationPoints() {
     val injector = new ScalaInjector(Guice.createInjector(module, mongoModule))
     val userEventService = injector.instance[UserEventService]
+    val userInfoService = injector.instance[UserInfoService]
     val donationPoints = injector.instance[DonationPoints]
 
-    val userId = "userId"
-    val projectId = "projectId"
+    val userId = "userId2"
+    val projectId = "projectId2"
 
     val result1 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION, Map("amount" -> List("500")))
     val result2 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION, Map("amount" -> List("500")))
@@ -88,21 +97,26 @@ class RewardSystemTest extends EmbedDb {
     Assert.assertEquals(result1(donationPoints.id), "501")
     Assert.assertEquals(result2(donationPoints.id), "500")
 
+    Assert.assertEquals(userInfoService.getPoints(userId), 1001)
+
   }
 
   def testDonationSharePoints() {
     val injector = new ScalaInjector(Guice.createInjector(module, mongoModule))
     val userEventService = injector.instance[UserEventService]
+    val userInfoService = injector.instance[UserInfoService]
     val shareAfterDonationPoints = injector.instance[ShareAfterDonationPoints]
 
-    val userId = "userId"
-    val projectId = "projectId"
+    val userId = "userId3"
+    val projectId = "projectId3"
 
     val result1 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION_SHARE, Map())
     val result2 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION_SHARE, Map())
 
     Assert.assertEquals(result1(shareAfterDonationPoints.id), "4")
     Assert.assertEquals(result2(shareAfterDonationPoints.id), "0")
+
+    Assert.assertEquals(userInfoService.getPoints(userId), 4)
 
   }
 }

@@ -10,7 +10,6 @@ import java.text.MessageFormat
 
 trait HttpDataStrategy {
   def executeMethod[R: Manifest](httpMethod: HttpUriRequest): Option[R]
-
   def executeMethod[R: Manifest](httpMethod: HttpUriRequest, parse: (HttpParserParam) => Option[R]): Option[R]
 }
 

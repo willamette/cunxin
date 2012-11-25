@@ -5,9 +5,7 @@ import org.cunxin.reward.app.model.{UserActivity, UserAllTimeStats, UserEventTyp
 
 trait Reward {
   def id: String
-
   def observingEvents: List[UserEventType]
-
   def register()
 
   def onPublish(userId: String,

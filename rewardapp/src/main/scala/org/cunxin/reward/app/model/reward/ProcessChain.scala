@@ -1,5 +1,7 @@
 package org.cunxin.reward.app.model.reward
 
+import badger.Badger
+import points.Points
 import collection.mutable
 import org.apache.commons.logging.LogFactory
 import org.cunxin.reward.app.model.UserEventType
@@ -29,7 +31,6 @@ object ProcessChain {
   }
 
   def getAllBadgers = badgerMap.values.toList
-
   def getAllPoints = pointsMap.values.toList
 
   def getAllRewards(eventType: UserEventType) = rewardSubscriptionMap.getOrElse(eventType, mutable.HashSet())
