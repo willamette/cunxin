@@ -31,19 +31,19 @@ abstract class EmbedDb {
 
   @BeforeClass(alwaysRun = true)
   protected def startMongoDb() {
-      mongoExec = Option(mongoRuntime.prepare(new MongodConfig(Version.V2_0_5, mongoPort, false)))
-      mongoExec match {
-        case Some(exec) => {
-          mongoProc = Option(exec.start())
-        }
-        case None =>
+    mongoExec = Option(mongoRuntime.prepare(new MongodConfig(Version.V2_0_5, mongoPort, false)))
+    mongoExec match {
+      case Some(exec) => {
+        mongoProc = Option(exec.start())
       }
+      case None =>
+    }
   }
 
   @AfterSuite(alwaysRun = true)
   protected def stopMongoDb() {
     mongoProc match {
-      case Some(proc) =>{
+      case Some(proc) => {
         proc.stop()
       }
       case None =>

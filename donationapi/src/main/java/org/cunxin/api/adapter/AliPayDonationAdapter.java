@@ -2,8 +2,8 @@ package org.cunxin.api.adapter;
 
 import com.google.inject.Inject;
 import com.yammer.metrics.annotation.Timed;
-import org.cunxin.app.dao.CunxinDonationDao;
 import org.cunxin.api.model.CunxinDonationRequest;
+import org.cunxin.app.dao.CunxinDonationDao;
 import org.cunxin.app.model.network.request.AliPayOnlinePaymentRequest;
 import org.cunxin.app.model.network.response.CunxinDonationResponse;
 import org.cunxin.app.model.network.response.OnlinePaymentResponse;

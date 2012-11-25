@@ -5,13 +5,12 @@ import org.codehaus.jackson.map.ObjectMapper
 import org.codehaus.jackson.`type`.TypeReference
 import java.lang.reflect.{Type, ParameterizedType}
 import java.io.{OutputStream, File, InputStream, StringWriter}
-import scala.collection.JavaConversions._
 
 class JsonSerDe {
   protected[this] val jacksonMapper = new ObjectMapper()
   jacksonMapper.registerModule(DefaultScalaModule)
 
-  def prettySerialize[T](t:T): String = {
+  def prettySerialize[T](t: T): String = {
     jacksonMapper.writerWithDefaultPrettyPrinter().writeValueAsString(t)
   }
 

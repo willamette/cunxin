@@ -12,13 +12,13 @@ import org.cunxin.reward.app.model.UserEventType
 @Produces(Array(MediaType.APPLICATION_JSON))
 class RewardApiServiceResource @Inject()(userEventService: UserEventService) {
 
-    @POST
-    @Timed
-    @Path("/recordEvent")
-    def recordEvent(@Valid req: CunxinRewardApiRequest): Option[CunxinRewardApiResponse] = {
-        val result = userEventService.recordEvent(req.userId, req.projectId, req.eventType, req.params)
-        Some(CunxinRewardApiResponse(result))
-    }
+  @POST
+  @Timed
+  @Path("/recordEvent")
+  def recordEvent(@Valid req: CunxinRewardApiRequest): Option[CunxinRewardApiResponse] = {
+    val result = userEventService.recordEvent(req.userId, req.projectId, req.eventType, req.params)
+    Some(CunxinRewardApiResponse(result))
+  }
 
 }
 

@@ -163,12 +163,6 @@
                 <version>2.15.2</version>
             </plugin>
 
-            <!-- bazaarvoice-authored plugins -->
-            <plugin>
-                <groupId>com.bazaarvoice.maven.plugins</groupId>
-                <artifactId>test-results-plugin</artifactId>
-                <version>1.1</version>
-            </plugin>
             <!--Creates the test jar for sharing common test codes across modules-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

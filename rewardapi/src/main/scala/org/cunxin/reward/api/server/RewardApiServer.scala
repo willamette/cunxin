@@ -9,10 +9,10 @@ import org.cunxin.reward.api.config.MongoConfiguration
 import org.cunxin.reward.api.service.{RewardApiServiceResource, ScalaService}
 
 object RewardApiServer extends ScalaService[MongoConfiguration]("Reward Api Server") {
-    val cacheSpec = CacheBuilderSpec.disableCaching()
+  val cacheSpec = CacheBuilderSpec.disableCaching()
 
-    def initialize(mongoConfig: MongoConfiguration, env: Environment) {
-        val injector = new ScalaInjector(Guice.createInjector(new RewardApiModule(mongoConfig), new RewardInstancesModule, new HttpStrategyModule))
-        env.addResource(injector.instance[RewardApiServiceResource])
-    }
+  def initialize(mongoConfig: MongoConfiguration, env: Environment) {
+    val injector = new ScalaInjector(Guice.createInjector(new RewardApiModule(mongoConfig), new RewardInstancesModule, new HttpStrategyModule))
+    env.addResource(injector.instance[RewardApiServiceResource])
+  }
 }

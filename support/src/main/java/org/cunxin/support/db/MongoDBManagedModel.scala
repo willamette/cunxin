@@ -2,7 +2,6 @@ package org.cunxin.support.db
 
 import java.util.Date
 import org.bson.types.ObjectId
-import scala.collection.JavaConversions._
 import com.mongodb.DBObject
 import com.mongodb.util.JSON
 import com.mongodb.casbah.{MongoCollection, MongoDB}
