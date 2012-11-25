@@ -18,7 +18,7 @@ class UserEventService @Inject()(userAllTimeDao: UserAllTimeDao,
     val result = userRewardService.publishActivity(userId, projectId, eventType, params)
     saveActivity(userId, projectId, eventType, params)
     updateAllTimeStats(userId, projectId, eventType)
-    result.values.foreach(s => userService.updatePoints(userId, s.toInt))
+    result.foreach(kv => userService.updateRewards(userId, kv._1, kv._2))
     result
   }
 

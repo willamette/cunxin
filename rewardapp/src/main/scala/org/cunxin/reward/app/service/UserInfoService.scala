@@ -8,12 +8,16 @@ class UserInfoService @Inject()(userDao: UserInfoDao) {
 
   def getAllUsers = userDao.findAll().map(_.data)
 
-  def updatePoints(userId: String, points: Int) {
+  def updateRewards(userId: String, rewardId: String, value: String) {
     userDao.findUserById(userId) match {
-      case None => userDao.create(UserInfo(userId, points, Set()))
+      case None => userDao.create(UserInfo(userId, value.toInt, Set()))
       case Some(uD) =>
-        val newUD = uD.copy(data = uD.data.copy(points = uD.data.points + points))
-        userDao.update(newUD)
+        val newUd = if (rewardId.endsWith("Points")) {
+          uD.copy(data = uD.data.copy(points = uD.data.points + value.toInt))
+        } else if (rewardId.endsWith("Badger") && value == "1") {
+          uD.copy(data = uD.data.copy(receivedBadgerIds = uD.data.receivedBadgerIds + rewardId))
+        } else uD
+        userDao.update(newUd)
     }
   }
 

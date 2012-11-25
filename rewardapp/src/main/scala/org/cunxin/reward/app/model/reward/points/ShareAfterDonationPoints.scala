@@ -2,6 +2,7 @@ package org.cunxin.reward.app.model.reward.points
 
 import collection.mutable
 import org.cunxin.reward.app.model.{EventStats, UserActivity, UserAllTimeStats, UserEventType}
+import org.cunxin.reward.app.model.reward.Points
 
 class ShareAfterDonationPoints extends Points {
   def id = "shareAfterDonationPoints"

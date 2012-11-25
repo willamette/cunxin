@@ -8,6 +8,7 @@ import com.mongodb.casbah.{MongoCollection, MongoDB}
 import com.mongodb.casbah.commons.MongoDBObject
 import org.apache.commons.logging.LogFactory
 import org.cunxin.support.util.JsonSerDe
+import scala.collection.JavaConversions._
 
 protected case class MongoDBManagedModel[T](id: ObjectId, data: T) extends DBManagedModel[T] {
   def copy(newData: T) = MongoDBManagedModel(id, newData)
