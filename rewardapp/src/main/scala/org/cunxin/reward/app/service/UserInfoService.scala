@@ -28,4 +28,11 @@ class UserInfoService @Inject()(userDao: UserInfoDao) {
     }
   }
 
+  def getBadgerIds(userId: String): Set[String] = {
+    userDao.findUserById(userId) match {
+      case None => Set()
+      case Some(uD) => uD.data.receivedBadgerIds
+    }
+  }
+
 }

@@ -2,6 +2,7 @@ package org.cunxin.reward.app.model.reward
 
 import com.google.inject.Inject
 import org.cunxin.reward.app.model.{UserActivity, UserAllTimeStats, UserEventType}
+import org.cunxin.reward.app.ProcessChain
 
 trait Reward {
   def id: String

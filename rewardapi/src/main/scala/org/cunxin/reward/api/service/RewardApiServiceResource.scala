@@ -26,7 +26,15 @@ class RewardApiServiceResource @Inject()(userEventService: UserEventService,
   @Path("/getPoints")
   def getPoints(@Valid req: CunxinRewardApiRequest): Option[CunxinRewardApiResponse] = {
     val result = userInfoService.getPoints(req.userId)
-    Some(CunxinRewardApiResponse(Map("points" -> result.toString)))
+    Some(CunxinRewardApiResponse(Map("userId" -> req.userId, "points" -> result.toString)))
+  }
+
+  @POST
+  @Timed
+  @Path("/getBadgerIds")
+  def getBadgerIds(@Valid req: CunxinRewardApiRequest): Option[CunxinRewardApiResponse] = {
+    val result = userInfoService.getBadgerIds(req.userId)
+    Some(CunxinRewardApiResponse(Map("userId" -> req.userId, "badgerIds" -> result.toString)))
   }
 
 }

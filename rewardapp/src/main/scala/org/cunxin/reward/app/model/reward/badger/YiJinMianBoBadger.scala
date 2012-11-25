@@ -11,7 +11,7 @@ class YiJinMianBoBadger extends Badger {
   def onPublish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]], pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
     pastAllTimeStats.allEventStats.stats.get(UserEventType.SUPPORT) match {
       case None => 0
-      case Some(times) => if (times == 100) 1 else 0
+      case Some(times) => if (times == 99) 1 else 0
     }
   }
 }

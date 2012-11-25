@@ -1,11 +1,11 @@
 package org.cunxin.reward.app.service
 
+import java.util.Date
+import collection.mutable
 import com.google.inject.Inject
 import org.cunxin.reward.app.dao._
-import org.cunxin.reward.app.model.reward.ProcessChain
 import org.cunxin.reward.app.model.{EventStats, UserAllTimeStats, UserEventType}
-import collection.mutable
-import java.util.Date
+import org.cunxin.reward.app.ProcessChain
 
 class UserRewardService @Inject()(userAllTimeDao: UserAllTimeDao,
                                   userActivityDao: UserActivityDao) {

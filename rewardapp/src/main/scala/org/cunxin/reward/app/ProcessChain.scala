@@ -1,6 +1,7 @@
-package org.cunxin.reward.app.model.reward
+package org.cunxin.reward.app
 
 import collection.mutable
+import model.reward.{Reward, Points, Badger}
 import org.apache.commons.logging.LogFactory
 import org.cunxin.reward.app.model.UserEventType
 

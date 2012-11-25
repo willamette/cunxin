@@ -11,6 +11,6 @@ class DaAiWuJiangBadger extends Badger {
   def onPublish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]], pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
     val totalTimes = pastActivities.filter(_.event == UserEventType.DONATION)
     val totalAmount = totalTimes.map(_.data("amount").head.toInt).sum
-    if (totalTimes.size >= 50 && totalAmount >= 5000) 1 else 0
+    if (totalTimes.size >= 49 && totalAmount + data("amount").head.toInt >= 5000) 1 else 0
   }
 }

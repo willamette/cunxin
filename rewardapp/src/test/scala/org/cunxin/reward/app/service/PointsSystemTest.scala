@@ -14,13 +14,16 @@ import org.apache.http.client.HttpClient
 import org.apache.http.params.{CoreConnectionPNames, BasicHttpParams}
 import org.apache.http.impl.client.DefaultHttpClient
 import org.apache.http.impl.conn.tsccm.ThreadSafeClientConnManager
-import java.util.concurrent.{Executors, ScheduledExecutorService}
+import org.cunxin.reward.app.module.{PointsInstancesModule, BadgersInstancesModule}
 
 @Test
-class RewardSystemTest extends EmbedDb {
+class PointsSystemTest extends EmbedDb {
 
   private[this] val module = new ScalaModule {
     def configure() {
+      install(new BadgersInstancesModule)
+      install(new PointsInstancesModule)
+
       bind[HttpClient].toInstance(createHttpClient)
       bind[HttpDataStrategyImpl].asEagerSingleton()
       bind[HttpDataStrategy].to[HttpDataStrategyImpl]
@@ -32,13 +35,6 @@ class RewardSystemTest extends EmbedDb {
       bind[UserEventService].asEagerSingleton()
       bind[UserRewardService].asEagerSingleton()
       bind[UserInfoService].asEagerSingleton()
-
-      bind[ShareAfterDonationPoints].asEagerSingleton()
-      bind[SupportPoints].asEagerSingleton()
-      bind[ShareToWeiBoPoints].asEagerSingleton()
-      bind[DonationPoints].asEagerSingleton()
-
-      bind[ScheduledExecutorService].toInstance(Executors.newScheduledThreadPool(4, Executors.defaultThreadFactory()))
     }
 
     private[this] def createHttpClient: HttpClient = {
