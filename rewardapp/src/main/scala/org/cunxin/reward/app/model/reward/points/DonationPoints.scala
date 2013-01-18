@@ -15,7 +15,7 @@ class DonationPoints extends Points {
         pastAllTimeStats.projectStats(projectId).stats.contains(UserEventType.DONATION))
         0
       else
-        1
+        3
     }
     val bonusPoints = data.getOrElse("amount", List("0")).head.toInt
     basicPoints + bonusPoints

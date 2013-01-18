@@ -3,6 +3,7 @@ package org.cunxin.reward.app.service
 import com.google.inject.Inject
 import org.cunxin.reward.app.dao.UserInfoDao
 import org.cunxin.reward.app.model.UserInfo
+import java.util.Date
 
 class UserInfoService @Inject()(userDao: UserInfoDao) {
 
@@ -10,7 +11,7 @@ class UserInfoService @Inject()(userDao: UserInfoDao) {
 
   def updateRewards(userId: String, rewardId: String, value: String) {
     userDao.findUserById(userId) match {
-      case None => userDao.create(UserInfo(userId, value.toInt, Set()))
+      case None => userDao.create(UserInfo(userId, value.toInt, new Date(), 1, Set()))
       case Some(uD) =>
         val newUd = if (rewardId.endsWith("Points")) {
           uD.copy(data = uD.data.copy(points = uD.data.points + value.toInt))
@@ -18,6 +19,23 @@ class UserInfoService @Inject()(userDao: UserInfoDao) {
           uD.copy(data = uD.data.copy(receivedBadgerIds = uD.data.receivedBadgerIds + rewardId))
         } else uD
         userDao.update(newUd)
+    }
+  }
+
+  def updateAndGetLoginDays(userId: String, loginDate: Date): Int = {
+    userDao.findUserById(userId) match {
+      case None => {
+        userDao.create(UserInfo(userId, 0, loginDate, 1, Set()))
+        1
+      }
+      case Some(uD) =>
+        val newUd = {
+          val lastLoginTime = uD.data.lastLoginDate.getTime
+          val loginDays = if (loginDate.getTime - lastLoginTime < 1000 * 60 * 60 * 24) uD.data.loginDays + 1 else 1
+          uD.copy(data = uD.data.copy(lastLoginDate = loginDate, loginDays = loginDays))
+        }
+        userDao.update(newUd)
+        newUd.data.loginDays
     }
   }
 

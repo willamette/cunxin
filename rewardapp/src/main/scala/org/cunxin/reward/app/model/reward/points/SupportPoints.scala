@@ -14,7 +14,7 @@ class SupportPoints extends Points {
     today.setHours(0)
     today.setMinutes(0)
     today.setSeconds(0)
-    val todayActivities = pastActivities.filter(a => a.date.compareTo(today) > -1 && a.event == UserEventType.SUPPORT)
+    val todayActivities = pastActivities.filter(a => a.date.compareTo(today) > 0 && a.event == UserEventType.SUPPORT & a.projectId != projectId)
     if (todayActivities.size >= 5) 0 else 1
   }
 }

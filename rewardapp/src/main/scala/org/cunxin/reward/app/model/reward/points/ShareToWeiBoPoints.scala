@@ -24,13 +24,14 @@ class ShareToWeiBoPoints @Inject()(httpDataStrategy: HttpDataStrategy, userInfoS
       def run() {
         val url = "http://api.weibo.com/2/statuses/count.json?ids=%s&access_token=%s".format(data("id")(0), data("token")(0))
         val result = httpDataStrategy.executeMethod[List[WeiBoResponse]](new HttpGet(url))
-        val reposts = result.getOrElse(return 0).head.reposts
-        if (reposts == "100") {
-          userInfoService.updateRewards(userId, ZhongZhiChengChengBadger.id, "1")
-        }
-        userInfoService.updateRewards(userId, id, reposts)
+        val reposts = result.getOrElse(return 0).head.reposts.toInt
+        //        if (reposts == "100") {
+        //          userInfoService.updateRewards(userId, ZhongZhiChengChengBadger.id, "1")
+        //        }
+        val points = if (reposts > 300) 10 else reposts / 10
+        userInfoService.updateRewards(userId, id, points.toString)
       }
     }, 167, TimeUnit.HOURS)
-    0
+    1
   }
 }
