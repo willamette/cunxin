@@ -51,13 +51,14 @@ class PointsSystemTest extends EmbedDb {
     }
   }
 
-  def testSupportPoints() {
-    val injector = new ScalaInjector(Guice.createInjector(module, mongoModule))
+  lazy val injector = new ScalaInjector(Guice.createInjector(module, mongoModule))
+
+  def testSupportPointsWithSameProjectIds() {
     val userEventService = injector.instance[UserEventService]
     val userInfoService = injector.instance[UserInfoService]
     val supportPoints = injector.instance[SupportPoints]
 
-    val userId = "userId1"
+    val userId = "userId1_1"
     val projectId = "projectId1"
 
     val result1 = userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
@@ -66,6 +67,37 @@ class PointsSystemTest extends EmbedDb {
     val result4 = userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
     val result5 = userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
     val result6 = userEventService.recordEvent(userId, projectId, UserEventType.SUPPORT, Map())
+
+    Assert.assertEquals(result1(supportPoints.id), "1")
+    Assert.assertEquals(result2(supportPoints.id), "0")
+    Assert.assertEquals(result3(supportPoints.id), "0")
+    Assert.assertEquals(result4(supportPoints.id), "0")
+    Assert.assertEquals(result5(supportPoints.id), "0")
+    Assert.assertEquals(result6(supportPoints.id), "0")
+
+    Assert.assertEquals(userInfoService.getPoints(userId), 1)
+
+  }
+
+  def testSupportPointsWithDiffProjectIds() {
+    val userEventService = injector.instance[UserEventService]
+    val userInfoService = injector.instance[UserInfoService]
+    val supportPoints = injector.instance[SupportPoints]
+
+    val userId = "userId1_2"
+    val projectId1 = "projectId1_1"
+    val projectId2 = "projectId1_2"
+    val projectId3 = "projectId1_3"
+    val projectId4 = "projectId1_4"
+    val projectId5 = "projectId1_5"
+    val projectId6 = "projectId1_6"
+
+    val result1 = userEventService.recordEvent(userId, projectId1, UserEventType.SUPPORT, Map())
+    val result2 = userEventService.recordEvent(userId, projectId2, UserEventType.SUPPORT, Map())
+    val result3 = userEventService.recordEvent(userId, projectId3, UserEventType.SUPPORT, Map())
+    val result4 = userEventService.recordEvent(userId, projectId4, UserEventType.SUPPORT, Map())
+    val result5 = userEventService.recordEvent(userId, projectId5, UserEventType.SUPPORT, Map())
+    val result6 = userEventService.recordEvent(userId, projectId6, UserEventType.SUPPORT, Map())
 
     Assert.assertEquals(result1(supportPoints.id), "1")
     Assert.assertEquals(result2(supportPoints.id), "1")
@@ -79,7 +111,6 @@ class PointsSystemTest extends EmbedDb {
   }
 
   def testDonationPoints() {
-    val injector = new ScalaInjector(Guice.createInjector(module, mongoModule))
     val userEventService = injector.instance[UserEventService]
     val userInfoService = injector.instance[UserInfoService]
     val donationPoints = injector.instance[DonationPoints]
@@ -90,29 +121,47 @@ class PointsSystemTest extends EmbedDb {
     val result1 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION, Map("amount" -> List("500")))
     val result2 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION, Map("amount" -> List("500")))
 
-    Assert.assertEquals(result1(donationPoints.id), "501")
+    Assert.assertEquals(result1(donationPoints.id), "503")
     Assert.assertEquals(result2(donationPoints.id), "500")
 
-    Assert.assertEquals(userInfoService.getPoints(userId), 1001)
+    Assert.assertEquals(userInfoService.getPoints(userId), 1003)
 
   }
 
   def testDonationSharePoints() {
-    val injector = new ScalaInjector(Guice.createInjector(module, mongoModule))
     val userEventService = injector.instance[UserEventService]
     val userInfoService = injector.instance[UserInfoService]
     val shareAfterDonationPoints = injector.instance[ShareAfterDonationPoints]
 
-    val userId = "userId3"
-    val projectId = "projectId3"
+    val userId = "userId2"
+    val projectId = "projectId2"
 
     val result1 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION_SHARE, Map())
     val result2 = userEventService.recordEvent(userId, projectId, UserEventType.DONATION_SHARE, Map())
 
-    Assert.assertEquals(result1(shareAfterDonationPoints.id), "4")
+    Assert.assertEquals(result1(shareAfterDonationPoints.id), "2")
     Assert.assertEquals(result2(shareAfterDonationPoints.id), "0")
 
-    Assert.assertEquals(userInfoService.getPoints(userId), 4)
+    Assert.assertEquals(userInfoService.getPoints(userId), 1005)
+
+  }
+
+
+  def testLoginPoints() {
+    val userEventService = injector.instance[UserEventService]
+    val userInfoService = injector.instance[UserInfoService]
+    val loginPoints = injector.instance[LoginPoints]
+
+    val userId = "userId3"
+    val projectId = "projectId3"
+
+    val result1 = userEventService.recordEvent(userId, projectId, UserEventType.LOGIN, Map())
+    val result2 = userEventService.recordEvent(userId, projectId, UserEventType.LOGIN, Map())
+
+    Assert.assertEquals(result1(loginPoints.id), "1")
+    Assert.assertEquals(result2(loginPoints.id), "0")
+
+    Assert.assertEquals(userInfoService.getPoints(userId), 1)
 
   }
 }

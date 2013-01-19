@@ -10,6 +10,7 @@ class PointsInstancesModule extends ScalaModule {
     bind[SupportPoints].asEagerSingleton()
     bind[ShareToWeiBoPoints].asEagerSingleton()
     bind[DonationPoints].asEagerSingleton()
+    bind[LoginPoints].asEagerSingleton()
 
     bind[ScheduledExecutorService].toInstance(Executors.newScheduledThreadPool(4, Executors.defaultThreadFactory()))
   }

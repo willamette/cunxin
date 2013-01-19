@@ -22,20 +22,20 @@ class UserInfoService @Inject()(userDao: UserInfoDao) {
     }
   }
 
-  def updateAndGetLoginDays(userId: String, loginDate: Date): Int = {
+  def updateAndGetLoginDaysAndLastLoginDate(userId: String, loginDate: Date): (Date, Int) = {
     userDao.findUserById(userId) match {
       case None => {
         userDao.create(UserInfo(userId, 0, loginDate, 1, Set()))
-        1
+       (new Date(0), 1)
       }
       case Some(uD) =>
+        val lastLoginDate = uD.data.lastLoginDate
         val newUd = {
-          val lastLoginTime = uD.data.lastLoginDate.getTime
-          val loginDays = if (loginDate.getTime - lastLoginTime < 1000 * 60 * 60 * 24) uD.data.loginDays + 1 else 1
+          val loginDays = if (loginDate.getTime - lastLoginDate.getTime >= 1000 * 60 * 60 * 24) uD.data.loginDays + 1 else 1
           uD.copy(data = uD.data.copy(lastLoginDate = loginDate, loginDays = loginDays))
         }
         userDao.update(newUd)
-        newUd.data.loginDays
+      (lastLoginDate,  newUd.data.loginDays)
     }
   }
 

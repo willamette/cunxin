@@ -11,9 +11,11 @@ class LoginPoints @Inject()(userInfoService: UserInfoService) extends Points {
 
   def observingEvents = List(UserEventType.LOGIN)
 
-  def onPublish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]], pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]) = {
+  def onPublish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]], pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
     val today = new Date
-    val loginDays = userInfoService.updateAndGetLoginDays(userId, today)
+    val (lastLoginDate, loginDays) = userInfoService.updateAndGetLoginDaysAndLastLoginDate(userId, today)
+
+    if (today.getTime - lastLoginDate.getTime < 1000 * 60 * 60 * 24) return 0
     //    "登陆网站，当天起每天获得1分
     //    连续登陆3天，则第3天起每天获得2分
     //    连续登陆5天，则第5天起每天获得3分
