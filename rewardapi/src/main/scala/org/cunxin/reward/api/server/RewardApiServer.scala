@@ -16,7 +16,7 @@ object RewardApiServer extends ScalaService[MongoConfiguration]("Reward Api Serv
     val injector = new ScalaInjector(Guice.createInjector(
       new RewardApiModule(mongoConfig),
       new PointsInstancesModule,
-      new BadgersInstancesModule,
+//      new BadgersInstancesModule,
       new HttpStrategyModule)
     )
     env.addResource(injector.instance[RewardApiServiceResource])

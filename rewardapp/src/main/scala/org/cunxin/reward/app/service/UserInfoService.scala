@@ -26,16 +26,20 @@ class UserInfoService @Inject()(userDao: UserInfoDao) {
     userDao.findUserById(userId) match {
       case None => {
         userDao.create(UserInfo(userId, 0, loginDate, 1, Set()))
-       (new Date(0), 1)
+        (new Date(0), 1)
       }
       case Some(uD) =>
         val lastLoginDate = uD.data.lastLoginDate
+        val todayDate = new Date(loginDate.getYear, loginDate.getMonth, loginDate.getDate)
         val newUd = {
-          val loginDays = if (loginDate.getTime - lastLoginDate.getTime >= 1000 * 60 * 60 * 24) uD.data.loginDays + 1 else 1
+          val loginDays =
+            if (todayDate.getTime > lastLoginDate.getTime) {  /* login in diff days */
+              if (todayDate.getTime - lastLoginDate.getTime < 1000 * 60 * 60 * 24) uD.data.loginDays + 1 else 1
+            } else uD.data.loginDays /* login in the same day */
           uD.copy(data = uD.data.copy(lastLoginDate = loginDate, loginDays = loginDays))
         }
         userDao.update(newUd)
-      (lastLoginDate,  newUd.data.loginDays)
+        (lastLoginDate, newUd.data.loginDays)
     }
   }
 

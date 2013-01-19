@@ -12,6 +12,7 @@ class UserRewardService @Inject()(userAllTimeDao: UserAllTimeDao,
 
   def publishActivity(userId: String,
                       projectId: String,
+                      date: Date,
                       userEvent: UserEventType,
                       data: Map[String, List[String]]): Map[String, String] = {
     val pastAllTimeActivities = userAllTimeDao.findUserAllTimeStatsByUserId(userId).map(_.data).getOrElse(
@@ -19,7 +20,7 @@ class UserRewardService @Inject()(userAllTimeDao: UserAllTimeDao,
     )
     val pastUserActivities = userActivityDao.findUserActivities(userId).map(_.data)
     ProcessChain.getAllRewards(userEvent).map {
-      r => r.id -> r.onPublish(userId, projectId, userEvent, data, pastAllTimeActivities, pastUserActivities).toString
+      r => r.id -> r.onPublish(userId, projectId, date, userEvent, data, pastAllTimeActivities, pastUserActivities).toString
     }.toMap
   }
 

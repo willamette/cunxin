@@ -8,6 +8,7 @@ import org.cunxin.reward.app.service.UserInfoService
 import java.util.concurrent.{TimeUnit, ScheduledExecutorService}
 import org.cunxin.reward.app.model.reward.Points
 import org.cunxin.reward.app.model.reward.badger.ZhongZhiChengChengBadger
+import java.util.Date
 
 case class WeiBoResponse(id: String, comments: String, reposts: String)
 
@@ -16,7 +17,7 @@ class ShareToWeiBoPoints @Inject()(httpDataStrategy: HttpDataStrategy, userInfoS
 
   def observingEvents = List(UserEventType.WEIBO_SHARE)
 
-  def onPublish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]],
+  def onPublish(userId: String, projectId: String, date: Date, eventType: UserEventType, data: Map[String, List[String]],
                 pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
     if (pastAllTimeStats.projectStats.contains(projectId) && pastAllTimeStats.projectStats(projectId).stats.contains(UserEventType.WEIBO_SHARE))
       return 0

@@ -2,13 +2,14 @@ package org.cunxin.reward.app.model.reward.points
 
 import org.cunxin.reward.app.model.{UserActivity, UserAllTimeStats, UserEventType}
 import org.cunxin.reward.app.model.reward.Points
+import java.util.Date
 
 class DonationPoints extends Points {
   def id = "donationPoints"
 
   def observingEvents = List(UserEventType.DONATION)
 
-  def onPublish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]],
+  def onPublish(userId: String, projectId: String, date: Date, eventType: UserEventType, data: Map[String, List[String]],
                 pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
     val basicPoints = {
       if (pastAllTimeStats.projectStats.contains(projectId) &&

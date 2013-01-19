@@ -7,6 +7,7 @@ import com.google.inject.Inject
 import com.yammer.metrics.annotation.Timed
 import org.cunxin.reward.app.service.{UserInfoService, UserEventService}
 import org.cunxin.reward.app.model.UserEventType
+import java.util.Date
 
 @Path("/rewardService")
 @Produces(Array(MediaType.APPLICATION_JSON))
@@ -17,7 +18,7 @@ class RewardApiServiceResource @Inject()(userEventService: UserEventService,
   @Timed
   @Path("/recordEvent")
   def recordEvent(@Valid req: CunxinRewardApiRequest): Option[CunxinRewardApiResponse] = {
-    val result = userEventService.recordEvent(req.userId, req.projectId, req.eventType, req.params)
+    val result = userEventService.recordEvent(req.userId, req.projectId, new Date, req.eventType, req.params)
     Some(CunxinRewardApiResponse(result))
   }
 

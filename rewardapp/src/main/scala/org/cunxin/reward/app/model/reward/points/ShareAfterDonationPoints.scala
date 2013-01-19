@@ -8,13 +8,14 @@ import java.util.concurrent.{ScheduledExecutorService, TimeUnit}
 import com.google.inject.Inject
 import org.cunxin.support.util.HttpDataStrategy
 import org.cunxin.reward.app.service.UserInfoService
+import java.util.Date
 
 class ShareAfterDonationPoints @Inject()(httpDataStrategy: HttpDataStrategy, userInfoService: UserInfoService, scheduler: ScheduledExecutorService) extends Points {
   def id = "shareAfterDonationPoints"
 
   def observingEvents = List(UserEventType.DONATION_SHARE)
 
-  def onPublish(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]],
+  def onPublish(userId: String, projectId: String, date: Date, eventType: UserEventType, data: Map[String, List[String]],
                 pastAllTimeStats: UserAllTimeStats, pastActivities: List[UserActivity]): Int = {
     val projectStats = pastAllTimeStats.projectStats.getOrElse(projectId, EventStats(new mutable.HashMap[UserEventType, Int]())).stats.getOrElse(UserEventType.DONATION_SHARE, 0)
     scheduler.schedule(new Runnable {

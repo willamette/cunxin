@@ -14,16 +14,16 @@ class UserEventService @Inject()(userAllTimeDao: UserAllTimeDao,
 
   val logger = LogFactory.getLog(this.getClass)
 
-  def recordEvent(userId: String, projectId: String, eventType: UserEventType, params: Map[String, List[String]]): Map[String, String] = {
-    val result = userRewardService.publishActivity(userId, projectId, eventType, params)
-    saveActivity(userId, projectId, eventType, params)
-    updateAllTimeStats(userId, projectId, eventType)
+  def recordEvent(userId: String, projectId: String, date: Date, eventType: UserEventType, params: Map[String, List[String]]): Map[String, String] = {
+    val result = userRewardService.publishActivity(userId, projectId, date, eventType, params)
+    saveActivity(userId, projectId, date, eventType, params)
+    updateAllTimeStats(userId, projectId, date, eventType)
     result.foreach(kv => userService.updateRewards(userId, kv._1, kv._2))
     result
   }
 
   //TODO: Code smell
-  private[this] def updateAllTimeStats(userId: String, projectId: String, eventType: UserEventType) {
+  private[this] def updateAllTimeStats(userId: String, projectId: String, date: Date, eventType: UserEventType) {
     synchronized {
       userAllTimeDao.findUserAllTimeStatsByUserId(userId) match {
         case None => {
@@ -35,7 +35,7 @@ class UserEventService @Inject()(userAllTimeDao: UserAllTimeDao,
           val newUserAllTimeStat = UserAllTimeStats(userId,
             newProjectStatsHashMap += (projectId -> EventStats(newEventHashMap)),
             EventStats(newAllTimeEventStats += (eventType -> 1)),
-            new Date())
+            date)
           userAllTimeDao.create(newUserAllTimeStat)
         }
         case Some(stat) => {
@@ -51,8 +51,8 @@ class UserEventService @Inject()(userAllTimeDao: UserAllTimeDao,
     }
   }
 
-  private[this] def saveActivity(userId: String, projectId: String, eventType: UserEventType, data: Map[String, List[String]]) {
-    val activity = UserActivity(userId, projectId, eventType, data, new Date())
+  private[this] def saveActivity(userId: String, projectId: String, date: Date, eventType: UserEventType, data: Map[String, List[String]]) {
+    val activity = UserActivity(userId, projectId, eventType, data, date)
     userActivityDao.create(activity)
   }
 }
