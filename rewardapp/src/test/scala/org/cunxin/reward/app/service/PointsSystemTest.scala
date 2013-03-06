@@ -178,9 +178,9 @@ class PointsSystemTest extends EmbedDb {
     val userId = "userId4"
     val projectId = "projectId4"
 
-    val day3 = new Date
-    val day2 = new Date(day3.getTime - 1000 * 60 * 60 * 24)
-    val day1 = new Date(day3.getTime - 1000 * 60 * 60 * 48)
+    val day1 = new Date(112, 12, 21)
+    val day2 = new Date(112, 12, 22)
+    val day3 = new Date(112, 12, 23)
     val result1 = userEventService.recordEvent(userId, projectId, day1, UserEventType.LOGIN, Map())
     val result2 = userEventService.recordEvent(userId, projectId, day2, UserEventType.LOGIN, Map())
     val result3 = userEventService.recordEvent(userId, projectId, day3, UserEventType.LOGIN, Map())
@@ -201,10 +201,10 @@ class PointsSystemTest extends EmbedDb {
     val userId = "userId5"
     val projectId = "projectId5"
 
-    val day4 = new Date
-    val day3 = new Date(day4.getTime - 1000 * 60 * 60 * 60)
-    val day2 = new Date(day3.getTime - 1000 * 60 * 60 * 24)
-    val day1 = new Date(day3.getTime - 1000 * 60 * 60 * 48)
+    val day1 = new Date(112, 12, 21)
+    val day2 = new Date(112, 12, 22)
+    val day3 = new Date(112, 12, 23)
+    val day4 = new Date(112, 12, 25)
     val result1 = userEventService.recordEvent(userId, projectId, day1, UserEventType.LOGIN, Map())
     val result2 = userEventService.recordEvent(userId, projectId, day2, UserEventType.LOGIN, Map())
     val result3 = userEventService.recordEvent(userId, projectId, day3, UserEventType.LOGIN, Map())
@@ -218,4 +218,25 @@ class PointsSystemTest extends EmbedDb {
     Assert.assertEquals(userInfoService.getPoints(userId), 5)
 
   }
+
+  def testLoginPointsOnTwoDaysButTwoSecondsGap() {
+    val userEventService = injector.instance[UserEventService]
+    val userInfoService = injector.instance[UserInfoService]
+    val loginPoints = injector.instance[LoginPoints]
+
+    val userId = "userId6"
+    val projectId = "projectId6"
+
+    val day1 = new Date(112, 12, 22, 23, 59, 59)
+    val day2 = new Date(112, 12, 23, 0, 0, 1)
+    val result1 = userEventService.recordEvent(userId, projectId, day1, UserEventType.LOGIN, Map())
+    val result2 = userEventService.recordEvent(userId, projectId, day2, UserEventType.LOGIN, Map())
+
+    Assert.assertEquals(result1(loginPoints.id), "1")
+    Assert.assertEquals(result2(loginPoints.id), "1")
+
+    Assert.assertEquals(userInfoService.getPoints(userId), 2)
+
+  }
+
 }
